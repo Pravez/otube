@@ -29,17 +29,19 @@ class Video {
       thumbnails.add(VideoThumbnail.fromJson(thumb));
     }*/
     return Video(
-      title: json["title"],
-      videoId: json["videoId"],
-      lengthSeconds: json["lengthSeconds"],
-      viewCount: json["viewCount"],
-      author: json["author"],
-      authorId: json["authorId"],
-      authorUrl: json["authorUrl"],
-      published: json["published"],
-      publishedText: json["publishedText"],
-      videoThumbnails: [VideoThumbnail.fromJson(json["videoThumbnails"][0])]
-    );
+        title: json["title"],
+        videoId: json["videoId"],
+        lengthSeconds: json["lengthSeconds"],
+        viewCount: json["viewCount"],
+        author: json["author"],
+        authorId: json["authorId"],
+        authorUrl: json["authorUrl"],
+        published: json["published"],
+        publishedText: json["publishedText"],
+        videoThumbnails: json["videoThumbnails"]
+            .map((thumbnail) => VideoThumbnail.fromJson(thumbnail))
+            .toList()
+            .cast<VideoThumbnail>());
   }
 }
 
@@ -53,10 +55,9 @@ class VideoThumbnail {
 
   factory VideoThumbnail.fromJson(Map<String, dynamic> json) {
     return VideoThumbnail(
-      quality: json["quality"],
-      url: json["url"],
-      width: json["width"],
-      height: json["height"]
-    );
+        quality: json["quality"],
+        url: json["url"],
+        width: json["width"],
+        height: json["height"]);
   }
 }

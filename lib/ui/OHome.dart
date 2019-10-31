@@ -1,12 +1,15 @@
-import 'package:flutter/cupertino.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:otube/service/VideoService.dart';
 import 'package:otube/service/dto/Video.dart';
+import 'package:otube/utils/Utils.dart';
+
+import 'OVideo.dart';
+import 'dart:async' as async;
 
 class OHome extends StatefulWidget {
-  OHome({Key key, this.title}) : super(key: key);
-
-  final String title;
+  OHome({Key key}) : super(key: key);
 
   @override
   _OHome createState() => _OHome();
@@ -25,56 +28,83 @@ class _OHome extends State<OHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text("Home"),
       ),
-      body: Center(
-          child: FutureBuilder<List<Video>>(
-        future: videos,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return videosBuilder(snapshot.data);
-          } else if (snapshot.hasError) {
-            return Text("${snapshot.error}");
-          }
-
-          return CircularProgressIndicator();
-        },
-      )),
+      body: Center(child: trendingBuilder()),
     );
   }
 
-  videoTapped(Video video) {}
+  trendingBuilder() {
+    return FutureBuilder<List<Video>>(
+      future: videos,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return videosBuilder(snapshot.data);
+        } else if (snapshot.hasError) {
+          return Text("${snapshot.error}");
+        }
 
+        return CircularProgressIndicator();
+      },
+    );
+  }
 
+  videoTapped(Video video) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => OVideo(
+                videoId: video.videoId,
+              )),
+    );
+  }
 
   videosBuilder(List<Video> videos) {
     var cards = videos
         .map((video) => Center(
-              child: GestureDetector(
-                onTap: videoTapped(video),
-                child: Card(
+                child: GestureDetector(
+              onTap: () => videoTapped(video),
+              child: Card(
                 semanticContainer: true,
                 clipBehavior: Clip.antiAliasWithSaveLayer,
-                child: loadImage(video.videoThumbnails[0].url),
+                child: FutureBuilder<Image>(
+                    future: loadThumbnail(video),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return snapshot.data;
+                      } else if (snapshot.hasError) {
+                        return Text("Error");
+                      }
+
+                      return CircularProgressIndicator();
+                    }),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0)
-                ),
+                    borderRadius: BorderRadius.circular(10.0)),
                 elevation: 5,
                 margin: EdgeInsets.all(10),
               ),
             )))
         .toList();
-    return Column(
+    return ListView(
       children: cards,
     );
   }
 
-  Widget loadImage(url)  {
-    try {
-      return Image.network(url, fit: BoxFit.fill);
-    } catch(e){
-      return Center(child: Text("No Image found"),);
+  Future<Image> loadThumbnail(Video video) async {
+    return getGoodUrl(video.videoThumbnails.map((thumb) => thumb.url).toList())
+        .then((url) => Image.network(
+              url,
+              fit: BoxFit.fill,
+            ));
+  }
+
+  Future<String> getGoodUrl(List<String> urls) async {
+    for (var url in urls) {
+      if (await Utils.checkResourceExists(url)) {
+        return url;
+      }
     }
+    return "";
   }
 
   listBuilder(List<Video> videos) {
