@@ -1,35 +1,37 @@
-import 'package:otube/service/VideoService.dart';
-import 'package:otube/service/dto/CompleteVideo.dart';
+import 'package:otube/model/complete_video.dart';
+import 'package:otube/ui/video/video_screen_arguments.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter/material.dart';
 
-class OVideo extends StatefulWidget {
-  const OVideo({Key key, this.videoId}) : super(key: key);
+class VideoScreen extends StatefulWidget {
+  static const route = '/video';
 
-  final String videoId;
+  const VideoScreen({Key key, this.arguments}) : super(key: key);
+  final OVideoArguments arguments;
 
   @override
-  _OVideoState createState() => _OVideoState(videoId);
+  _VideoScreenState createState() => _VideoScreenState(arguments);
 }
 
-class _OVideoState extends State<OVideo> {
-  _OVideoState(this.videoId);
-
+class _VideoScreenState extends State<VideoScreen> {
   VideoPlayerController _controller;
-  final String videoId;
   CompleteVideo video;
+
+  _VideoScreenState(this.arguments);
+
+  final OVideoArguments arguments;
 
   @override
   void initState() {
     super.initState();
-    VideoService.fetchVideo(videoId).then((vid) {
+    /*VideoService.fetchVideo(arguments.videoId).then((vid) {
       video = vid;
       _controller = VideoPlayerController.network(video.formatStreams[0].url)
         ..initialize().then((_) {
           // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
           setState(() {});
         });
-    });
+    });*/
   }
 
   @override

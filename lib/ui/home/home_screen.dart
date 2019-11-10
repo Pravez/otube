@@ -1,28 +1,12 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:otube/service/VideoService.dart';
-import 'package:otube/service/dto/Video.dart';
-import 'package:otube/utils/Utils.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:otube/bloc/invidious_query_bloc.dart';
+import 'package:otube/ui/components/video_list.dart';
 
-import 'OVideo.dart';
-import 'dart:async' as async;
 
-class OHome extends StatefulWidget {
-  OHome({Key key}) : super(key: key);
-
-  @override
-  _OHome createState() => _OHome();
-}
-
-class _OHome extends State<OHome> {
-  Future<List<Video>> videos;
-
-  @override
-  void initState() {
-    super.initState();
-    videos = VideoService.fetchTop();
-  }
+class HomeScreen extends StatelessWidget {
+  static const route = "/";
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +14,16 @@ class _OHome extends State<OHome> {
       appBar: AppBar(
         title: Text("Home"),
       ),
-      body: Center(child: trendingBuilder()),
+      body: BlocProvider(
+        builder: (context) => InvidiousQueryBloc(),
+        child: VideoList(),
+      ),
     );
   }
+}
 
-  trendingBuilder() {
+
+  /*trendingBuilder() {
     return FutureBuilder<List<Video>>(
       future: videos,
       builder: (context, snapshot) {
@@ -50,12 +39,10 @@ class _OHome extends State<OHome> {
   }
 
   videoTapped(Video video) {
-    Navigator.push(
+    Navigator.pushNamed(
       context,
-      MaterialPageRoute(
-          builder: (context) => OVideo(
-                videoId: video.videoId,
-              )),
+      OVideo.route,
+      arguments: OVideoArguments(video.videoId)
     );
   }
 
@@ -67,7 +54,7 @@ class _OHome extends State<OHome> {
               child: Card(
                 semanticContainer: true,
                 clipBehavior: Clip.antiAliasWithSaveLayer,
-                child: FutureBuilder<Image>(
+                child: FutureBuilder<CachedNetworkImage>(
                     future: loadThumbnail(video),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
@@ -87,14 +74,17 @@ class _OHome extends State<OHome> {
         .toList();
     return ListView(
       children: cards,
+      
     );
   }
 
-  Future<Image> loadThumbnail(Video video) async {
+  Future<CachedNetworkImage> loadThumbnail(Video video) async {
     return getGoodUrl(video.videoThumbnails.map((thumb) => thumb.url).toList())
-        .then((url) => Image.network(
-              url,
+        .then((url) => CachedNetworkImage(
+              imageUrl: url,
               fit: BoxFit.fill,
+              placeholder: (context, url) => CircularProgressIndicator(),
+      errorWidget: (context, error, err) => Text("error"),
             ));
   }
 
@@ -122,5 +112,5 @@ class _OHome extends State<OHome> {
         );
       },
     );
-  }
-}
+  }*/
+
