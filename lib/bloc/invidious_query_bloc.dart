@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:otube/service/invidious_query_event.dart';
+import 'package:otube/service/invidious_query_type.dart';
 import 'package:otube/service/invidious_repository.dart';
 import 'package:otube/state/invidious_query_state.dart';
 
@@ -16,25 +17,23 @@ class InvidiousQueryBloc
   @override
   Stream<InvidiousQueryState> mapEventToState(
       InvidiousQueryEvent event) async* {
-    if (event is RefreshTrending) {
-      yield* _loadList("trending");
-    } else if (event is RefreshTop) {
-      yield* _loadList("top");
+     if (event is Refresh) {
+      yield* _loadList(event.type);
     } else if (event is VideoQuery) {
       yield* _loadVideo(event);
     }
   }
 
-  Stream<InvidiousQueryState> _loadList(String category) async* {
+  Stream<InvidiousQueryState> _loadList(InvidiousQueryType type) async* {
     yield InvidiousQueryLoading();
     try {
-      final results = await (category == "top"
+      final results = await (type == InvidiousQueryType.TOP
           ? InvidiousRepository.getTop
           : InvidiousRepository.getTrending)();
       yield InvidiousQuerySuccess(results);
     } catch (error) {
       yield InvidiousQueryError(
-          'Something went wrong when asking for $category');
+          'Something went wrong when asking for $type');
     }
   }
 

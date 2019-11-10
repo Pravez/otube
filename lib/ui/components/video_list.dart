@@ -6,23 +6,29 @@ import 'package:otube/bloc/invidious_query_bloc.dart';
 import 'package:otube/model/video.dart';
 import 'package:otube/model/video_list_result.dart';
 import 'package:otube/service/invidious_query_event.dart';
+import 'package:otube/service/invidious_query_type.dart';
 import 'package:otube/state/invidious_query_state.dart';
 import 'package:otube/utils/utils.dart';
 
 class VideoList extends StatefulWidget {
+  final InvidiousQueryType type;
+
+  const VideoList({Key key, @required this.type}) : super(key: key);
   @override
-  State<StatefulWidget> createState() => _VideoListState();
+  State<StatefulWidget> createState() => _VideoListState(this.type);
 }
 
 class _VideoListState extends State<VideoList> {
+  final InvidiousQueryType type;
   InvidiousQueryBloc _queryBloc;
 
+  _VideoListState(this.type);
 
   @override
   void initState() {
     super.initState();
     _queryBloc = BlocProvider.of(context);
-    _queryBloc.add(RefreshTop());
+    _queryBloc.add(Refresh(type: type));
   }
 
   @override
@@ -41,7 +47,7 @@ class _VideoListState extends State<VideoList> {
             child: Center(
               child: RefreshIndicator(
                 child: ListView(children: <Widget>[Text(state.errorMessage)],),
-                onRefresh: () => Future(() => _queryBloc.add(RefreshTop())),
+                onRefresh: () => Future(() => _queryBloc.add(Refresh(type: type))),
               )
             ),
           );
