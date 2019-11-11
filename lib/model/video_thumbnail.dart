@@ -12,4 +12,9 @@ class VideoThumbnail {
   VideoThumbnail({this.quality, this.url, this.width, this.height});
 
   factory VideoThumbnail.fromJson(Map<String, dynamic> json) => _$VideoThumbnailFromJson(json);
+
+}
+
+enum VideoThumbnailQuality {
+  LOW, MAX, DEFAULT
 }

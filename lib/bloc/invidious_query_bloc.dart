@@ -19,9 +19,7 @@ class InvidiousQueryBloc
       InvidiousQueryEvent event) async* {
      if (event is Refresh) {
       yield* _loadList(event.type);
-    } else if (event is VideoQuery) {
-      yield* _loadVideo(event);
-    }
+    } 
   }
 
   Stream<InvidiousQueryState> _loadList(InvidiousQueryType type) async* {
@@ -34,21 +32,6 @@ class InvidiousQueryBloc
     } catch (error) {
       yield InvidiousQueryError(
           'Something went wrong when asking for $type');
-    }
-  }
-
-  Stream<InvidiousQueryState> _loadVideo(VideoQuery query) async* {
-    if (query.videoId.isEmpty) {
-      yield InvidiousQueryEmpty();
-    } else {
-      yield InvidiousQueryLoading();
-      try {
-        final results = await InvidiousRepository.getVideo(query.videoId);
-        yield InvidiousQuerySuccess(results);
-      } catch (error) {
-        yield InvidiousQueryError(
-            "Unable to fetch video with id ${query.videoId}");
-      }
     }
   }
 }

@@ -8,12 +8,15 @@ import 'package:otube/model/video_list_result.dart';
 import 'package:otube/service/invidious_query_event.dart';
 import 'package:otube/service/invidious_query_type.dart';
 import 'package:otube/state/invidious_query_state.dart';
+import 'package:otube/ui/video/video_screen.dart';
+import 'package:otube/ui/video/video_screen_arguments.dart';
 import 'package:otube/utils/utils.dart';
 
 class VideoList extends StatefulWidget {
   final InvidiousQueryType type;
 
   const VideoList({Key key, @required this.type}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _VideoListState(this.type);
 }
@@ -36,28 +39,22 @@ class _VideoListState extends State<VideoList> {
     return BlocBuilder<InvidiousQueryBloc, InvidiousQueryState>(
       bloc: BlocProvider.of(context),
       builder: (context, state) {
-        if (state is InvidiousQueryEmpty) {
-          return Text("No videos found");
-        }
         if (state is InvidiousQueryLoading) {
           return CircularProgressIndicator();
         }
         if (state is InvidiousQueryError) {
+          return Text("Error");
+        }
+        if (state is InvidiousQuerySuccess) {
           return Container(
             child: Center(
               child: RefreshIndicator(
-                child: ListView(children: <Widget>[Text(state.errorMessage)],),
                 onRefresh: () => Future(() => _queryBloc.add(Refresh(type: type))),
-              )
+                child: _VideoList(result: state.result),
+              ),
             ),
           );
         }
-        if (state is InvidiousQuerySuccess) {
-          return _VideoList(
-            result: state.result,
-          );
-        }
-
         return Text("Nothing here ...");
       },
     );
@@ -73,13 +70,13 @@ class _VideoList extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: result.videos.length,
-      itemBuilder: (context, position) => _buildVideo(result.videos[position]),
+      itemBuilder: (context, position) => _buildVideo(context, result.videos[position]),
     );
   }
 
-  _buildVideo(Video video) {
+  _buildVideo(BuildContext context, Video video) {
     return GestureDetector(
-      onTap: _videoTapped(video),
+      onTap: () => _videoTapped(context, video),
       child: Column(
         children: <Widget>[
           Row(
@@ -142,18 +139,18 @@ class _VideoList extends StatelessWidget {
     );
   }
 
-  _videoTapped(Video video) {
-    print(("Tapped on ${video.title} !"));
+  _videoTapped(BuildContext context, Video video) {
+    Navigator.pushNamed(context, VideoScreen.route,
+        arguments: VideoScreenArguments(video));
   }
 
   Future<CachedNetworkImage> loadThumbnail(Video video) async {
-    return getGoodUrl(video.videoThumbnails.map((thumb) => thumb.url).toList())
-        .then((url) => CachedNetworkImage(
-              imageUrl: url,
-              fit: BoxFit.cover,
-              placeholder: (context, url) => CircularProgressIndicator(),
-              errorWidget: (context, error, err) => Text("error"),
-            ));
+    return CachedNetworkImage(
+      imageUrl: video.getBestThumbnailUrl(),
+      fit: BoxFit.cover,
+      placeholder: (context, url) => CircularProgressIndicator(),
+      errorWidget: (context, error, err) => Text("error"),
+    );
   }
 
   Future<String> getGoodUrl(List<String> urls) async {

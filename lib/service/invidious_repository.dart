@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:otube/model/video.dart';
+import 'package:otube/model/complete_video.dart';
 import 'package:otube/model/video_list_result.dart';
 
 import 'invidious_cache.dart';
@@ -24,5 +24,5 @@ class InvidiousRepository {
 
   static Future<VideoListResult> getTrending() async => _getList("trending");
 
-  static Future<Video> getVideo(String id) async => await client.video(id);
+  static Future<CompleteVideo> getVideo(String id) async => await client.video(id);
 }

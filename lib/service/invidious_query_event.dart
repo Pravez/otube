@@ -19,13 +19,3 @@ class Refresh extends InvidiousQueryEvent {
   @override
   String toString() => 'Refresh { type: $type }';
 }
-class VideoQuery extends InvidiousQueryEvent {
-  final String videoId;
-
-  VideoQuery({this.videoId});
-
-  @override
-  List<Object> get props => [videoId];
-  @override
-  String toString() => 'VideoQuery { videoId: $videoId }';
-}

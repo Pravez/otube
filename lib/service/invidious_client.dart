@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:otube/model/complete_video.dart';
 import 'package:otube/model/video.dart';
 import 'package:otube/model/video_list_result.dart';
 
@@ -19,8 +20,8 @@ class InvidiousClient {
   Future<VideoListResult> trending() async => _fetch("trending")
       .then((json) => VideoListResult.fromJson(json));
 
-  Future<Video> video(String id) async =>
-      _fetch("videos/$id").then((json) => Video.fromJson(json));
+  Future<CompleteVideo> video(String id) async =>
+      _fetch("videos/$id").then((json) => CompleteVideo.fromJson(json));
 
   Future<dynamic> _fetch(String path) async {
     try {

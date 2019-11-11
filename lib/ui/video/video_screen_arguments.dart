@@ -1,7 +1,9 @@
 
 
-class OVideoArguments {
-  final String videoId;
+import 'package:otube/model/video.dart';
 
-  OVideoArguments(this.videoId);
+class VideoScreenArguments {
+  final Video video;
+
+  VideoScreenArguments(this.video);
 }
