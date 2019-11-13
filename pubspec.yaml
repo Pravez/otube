@@ -20,6 +20,7 @@ dependencies:
   equatable: ^0.6.0
   flutter_bloc: ^2.0.0
   chewie: 0.9.8+1
+  expandable: 3.0.1
 
 dev_dependencies:
   json_serializable: ^3.2.0

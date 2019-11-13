@@ -7,6 +7,7 @@ import 'package:otube/model/complete_video.dart';
 import 'package:otube/model/video.dart';
 import 'package:otube/service/invidious_video_event.dart';
 import 'package:otube/state/invidious_query_state.dart';
+import 'package:otube/ui/components/invidious_video_description.dart';
 import 'package:video_player/video_player.dart';
 
 class InvidiousVideoHandler extends StatefulWidget {
@@ -81,8 +82,13 @@ class _InvidiousVideoPlayer extends State<InvidiousVideoPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    return Chewie(
-      controller: _chewie,
+    return Column(
+      children: <Widget>[
+        Chewie(
+          controller: _chewie,
+        ),
+        InvidiousVideoDescription(video: video,)
+      ],
     );
   }
 

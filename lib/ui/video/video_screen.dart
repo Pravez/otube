@@ -18,15 +18,11 @@ class VideoScreen extends StatelessWidget {
           backgroundColor: Colors.transparent,
           elevation: 0.0,
         ),
-        body: Column(
-          children: <Widget>[
-            BlocProvider(
-              builder: (context) => InvidiousVideoBloc(),
-              child: InvidiousVideoHandler(
-                video: arguments.video,
-              ),
-            ),
-          ],
+        body: BlocProvider(
+          builder: (context) => InvidiousVideoBloc(),
+          child: InvidiousVideoHandler(
+            video: arguments.video,
+          ),
         ));
   }
 }
