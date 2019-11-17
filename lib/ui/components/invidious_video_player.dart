@@ -16,20 +16,17 @@ class InvidiousVideoHandler extends StatefulWidget {
   const InvidiousVideoHandler({Key key, this.video}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _InvidiousVideoHandlerState(video);
+  State<StatefulWidget> createState() => _InvidiousVideoHandlerState();
 }
 
 class _InvidiousVideoHandlerState extends State<InvidiousVideoHandler> {
-  final Video video;
   InvidiousVideoBloc _videoBloc;
-
-  _InvidiousVideoHandlerState(this.video);
 
   @override
   void initState() {
     super.initState();
     _videoBloc = BlocProvider.of(context);
-    _videoBloc.add(VideoQuery(videoId: video.videoId));
+    _videoBloc.add(VideoQuery(videoId: widget.video.videoId));
   }
 
   @override
@@ -59,19 +56,17 @@ class InvidiousVideoPlayer extends StatefulWidget {
   const InvidiousVideoPlayer({Key key, @required this.video}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _InvidiousVideoPlayer(video);
+  State<StatefulWidget> createState() => _InvidiousVideoPlayer();
 }
 
 class _InvidiousVideoPlayer extends State<InvidiousVideoPlayer> {
-  final CompleteVideo video;
   VideoPlayerController _controller;
   ChewieController _chewie;
 
-  _InvidiousVideoPlayer(this.video);
 
   @override
   void initState() {
-    _controller = VideoPlayerController.network(video.formatStreams[0].url);
+    _controller = VideoPlayerController.network(widget.video.formatStreams[0].url);
     _chewie = ChewieController(
         videoPlayerController: _controller,
         aspectRatio: 3 / 2,
@@ -88,7 +83,7 @@ class _InvidiousVideoPlayer extends State<InvidiousVideoPlayer> {
           controller: _chewie,
         ),
         InvidiousVideoInformation(
-          video: video,
+          video: widget.video,
         )
       ],
     );

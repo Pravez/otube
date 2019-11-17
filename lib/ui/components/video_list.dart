@@ -8,6 +8,7 @@ import 'package:otube/model/video_list_result.dart';
 import 'package:otube/bloc/service/invidious_query_event.dart';
 import 'package:otube/bloc/service/invidious_query_type.dart';
 import 'package:otube/bloc/state/invidious_query_state.dart';
+import 'package:otube/ui/components/video/video_thumbnail.dart';
 import 'package:otube/ui/video/video_screen.dart';
 import 'package:otube/ui/video/video_screen_arguments.dart';
 import 'package:otube/utils/utils.dart';
@@ -18,20 +19,17 @@ class VideoList extends StatefulWidget {
   const VideoList({Key key, @required this.type}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _VideoListState(this.type);
+  State<StatefulWidget> createState() => _VideoListState();
 }
 
 class _VideoListState extends State<VideoList> {
-  final InvidiousQueryType type;
   InvidiousQueryBloc _queryBloc;
-
-  _VideoListState(this.type);
 
   @override
   void initState() {
     super.initState();
     _queryBloc = BlocProvider.of(context);
-    _queryBloc.add(Refresh(type: type));
+    _queryBloc.add(Refresh(type: widget.type));
   }
 
   @override
@@ -49,7 +47,8 @@ class _VideoListState extends State<VideoList> {
           return Container(
             child: Center(
               child: RefreshIndicator(
-                onRefresh: () => Future(() => _queryBloc.add(Refresh(type: type))),
+                onRefresh: () =>
+                    Future(() => _queryBloc.add(Refresh(type: widget.type))),
                 child: _VideoList(result: state.result),
               ),
             ),
@@ -70,7 +69,8 @@ class _VideoList extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: result.videos.length,
-      itemBuilder: (context, position) => _buildVideo(context, result.videos[position]),
+      itemBuilder: (context, position) =>
+          _buildVideo(context, result.videos[position]),
     );
   }
 
@@ -82,18 +82,9 @@ class _VideoList extends StatelessWidget {
           Row(
             children: <Widget>[
               Expanded(
-                child: FutureBuilder<CachedNetworkImage>(
-                    future: loadThumbnail(video),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return snapshot.data;
-                      } else if (snapshot.hasError) {
-                        return Text("Error");
-                      }
-
-                      return CircularProgressIndicator();
-                    }),
-              )
+                  child: VideoThumbnailImage(
+                thumbnails: video.videoThumbnails,
+              ))
             ],
           ),
           Padding(
@@ -142,23 +133,5 @@ class _VideoList extends StatelessWidget {
   _videoTapped(BuildContext context, Video video) {
     Navigator.pushNamed(context, VideoScreen.route,
         arguments: VideoScreenArguments(video));
-  }
-
-  Future<CachedNetworkImage> loadThumbnail(Video video) async {
-    return CachedNetworkImage(
-      imageUrl: video.getBestThumbnailUrl(),
-      fit: BoxFit.cover,
-      placeholder: (context, url) => CircularProgressIndicator(),
-      errorWidget: (context, error, err) => Text("error"),
-    );
-  }
-
-  Future<String> getGoodUrl(List<String> urls) async {
-    for (var url in urls) {
-      if (await Utils.checkResourceExists(url)) {
-        return url;
-      }
-    }
-    return "";
   }
 }

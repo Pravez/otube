@@ -37,17 +37,4 @@ class Video {
     this.videoThumbnails});
 
   factory Video.fromJson(Map<String, dynamic> json) => _$VideoFromJson(json);
-
-  String getBestThumbnailUrl(
-      {VideoThumbnailQuality priority = VideoThumbnailQuality.LOW}) {
-    final sortFunc = priority == VideoThumbnailQuality.LOW ?
-        (a, b) =>
-        VIDEO_QUALITIES.indexOf(a.quality).compareTo(
-            VIDEO_QUALITIES.indexOf(b.quality)) :
-    (a, b) =>
-        VIDEO_QUALITIES.indexOf(b.quality).compareTo(
-            VIDEO_QUALITIES.indexOf(a.quality));
-        videoThumbnails.sort(sortFunc);
-        return videoThumbnails.firstWhere((thumb) => thumb.url != null).url;
-  }
 }

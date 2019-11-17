@@ -4,6 +4,7 @@ import 'package:flutter/painting.dart';
 import 'package:otube/model/complete_video.dart';
 import 'package:otube/ui/components/video/video_description.dart';
 import 'package:otube/ui/components/video/video_details.dart';
+import 'package:otube/ui/components/video/video_suggestions.dart';
 import 'package:otube/ui/components/video/video_title.dart';
 
 class InvidiousVideoInformation extends StatelessWidget {
@@ -17,7 +18,8 @@ class InvidiousVideoInformation extends StatelessWidget {
     final videoAssets = [
       VideoTitle(video: video),
       VideoDetails(video: video),
-      VideoDescription(video: video)
+      VideoDescription(video: video),
+      VideoSuggestions(video: video,)
     ];
 
     return Container(
