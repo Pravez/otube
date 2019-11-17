@@ -1,7 +1,7 @@
 
 
 import 'package:equatable/equatable.dart';
-import 'package:otube/service/invidious_query_type.dart';
+import 'package:otube/bloc/service/invidious_query_type.dart';
 
 abstract class InvidiousQueryEvent extends Equatable {
   const InvidiousQueryEvent();

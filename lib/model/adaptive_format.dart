@@ -11,7 +11,7 @@ class AdaptiveFormat {
   final String type;
   final String clen;
   final String lmt;
-  final int projectionType;
+  final String projectionType;
   final String container;
   final String encoding;
   final String qualityLabel;

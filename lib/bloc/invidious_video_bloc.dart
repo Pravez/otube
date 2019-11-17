@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
-import 'package:otube/service/invidious_repository.dart';
-import 'package:otube/service/invidious_video_event.dart';
-import 'package:otube/state/invidious_query_state.dart';
+import 'package:otube/bloc/service/invidious_repository.dart';
+import 'package:otube/bloc/service/invidious_video_event.dart';
+import 'package:otube/bloc/state/invidious_query_state.dart';
 
 class InvidiousVideoBloc
     extends Bloc<InvidiousVideoEvent, InvidiousQueryState> {
@@ -31,6 +31,7 @@ class InvidiousVideoBloc
         final results = await InvidiousRepository.getVideo(query.videoId);
         yield InvidiousQuerySuccess(results);
       } catch (error) {
+        print(error.toString());
         yield InvidiousQueryError(
             "Unable to fetch video with id ${query.videoId}");
       }
