@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:otube/bloc/invidious_video_comments_block.dart';
 import 'package:otube/model/complete_video.dart';
+import 'package:otube/ui/components/video/video_commentary.dart';
 import 'package:otube/ui/components/video/video_description.dart';
 import 'package:otube/ui/components/video/video_details.dart';
 import 'package:otube/ui/components/video/video_suggestions.dart';
@@ -19,7 +22,11 @@ class InvidiousVideoInformation extends StatelessWidget {
       VideoTitle(video: video),
       VideoDetails(video: video),
       VideoDescription(video: video),
-      VideoSuggestions(video: video,)
+      VideoSuggestions(video: video),
+      BlocProvider(
+        builder: (context) => InvidiousVideoCommentsBloc(),
+        child: VideoCommentary(video: video),
+      ),
     ];
 
     return Container(

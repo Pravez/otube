@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:otube/model/complete_video.dart';
+import 'package:otube/model/invidious_instances.dart';
 import 'package:otube/model/video_comments.dart';
 import 'package:otube/model/video_list_result.dart';
 
@@ -11,20 +12,21 @@ class InvidiousClient {
   final http.Client httpClient;
 
   InvidiousClient(
-      {http.Client httpClient, this.baseUrl = "https://invidio.us/api/v1/"})
+      {http.Client httpClient,
+      this.baseUrl = "https://" + InvidiousInstances.mainInstance + "/api/v1/"})
       : this.httpClient = httpClient ?? http.Client();
 
-  Future<VideoListResult> top() async => _fetch("top")
-      .then((json) => VideoListResult.fromJson(json));
+  Future<VideoListResult> top() async =>
+      _fetch("top").then((json) => VideoListResult.fromJson(json));
 
-  Future<VideoListResult> trending() async => _fetch("trending")
-      .then((json) => VideoListResult.fromJson(json));
+  Future<VideoListResult> trending() async =>
+      _fetch("trending").then((json) => VideoListResult.fromJson(json));
 
   Future<CompleteVideo> video(String id) async =>
       _fetch("videos/$id").then((json) => CompleteVideo.fromJson(json));
 
   Future<VideoComments> comments(String id) async =>
-    _fetch("comments/$id").then((json) => VideoComments.fromJson(json));
+      _fetch("comments/$id").then((json) => VideoComments.fromJson(json));
 
   Future<dynamic> _fetch(String path) async {
     try {

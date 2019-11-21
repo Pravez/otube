@@ -4,16 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:otube/bloc/invidious_video_bloc.dart';
 import 'package:otube/model/complete_video.dart';
-import 'package:otube/model/video.dart';
-import 'package:otube/bloc/service/invidious_video_event.dart';
+import 'package:otube/bloc/service/events/invidious_video_event.dart';
 import 'package:otube/bloc/state/invidious_query_state.dart';
 import 'package:otube/ui/components/invidious_video_information.dart';
 import 'package:video_player/video_player.dart';
 
 class InvidiousVideoHandler extends StatefulWidget {
-  final Video video;
+  final String videoId;
 
-  const InvidiousVideoHandler({Key key, this.video}) : super(key: key);
+  const InvidiousVideoHandler({Key key, this.videoId}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _InvidiousVideoHandlerState();
@@ -26,7 +25,7 @@ class _InvidiousVideoHandlerState extends State<InvidiousVideoHandler> {
   void initState() {
     super.initState();
     _videoBloc = BlocProvider.of(context);
-    _videoBloc.add(VideoQuery(videoId: widget.video.videoId));
+    _videoBloc.add(VideoQuery(videoId: widget.videoId));
   }
 
   @override

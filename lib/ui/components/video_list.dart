@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:otube/bloc/invidious_query_bloc.dart';
 import 'package:otube/model/video.dart';
 import 'package:otube/model/video_list_result.dart';
-import 'package:otube/bloc/service/invidious_query_event.dart';
+import 'package:otube/bloc/service/events/invidious_query_event.dart';
 import 'package:otube/bloc/service/invidious_query_type.dart';
 import 'package:otube/bloc/state/invidious_query_state.dart';
 import 'package:otube/ui/components/video/video_thumbnail.dart';
@@ -34,21 +34,27 @@ class _VideoListState extends State<VideoList> {
 
   @override
   Widget build(BuildContext context) {
+    final refresh =
+        () => Future(() => _queryBloc.add(Refresh(type: widget.type)));
     return BlocBuilder<InvidiousQueryBloc, InvidiousQueryState>(
       bloc: BlocProvider.of(context),
       builder: (context, state) {
         if (state is InvidiousQueryLoading) {
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         }
         if (state is InvidiousQueryError) {
-          return Text("Error");
+          return Center(
+            child: IconButton(
+              icon: Icon(Icons.refresh),
+              onPressed: refresh,
+            ),
+          );
         }
         if (state is InvidiousQuerySuccess) {
           return Container(
             child: Center(
               child: RefreshIndicator(
-                onRefresh: () =>
-                    Future(() => _queryBloc.add(Refresh(type: widget.type))),
+                onRefresh: refresh,
                 child: _VideoList(result: state.result),
               ),
             ),
@@ -76,7 +82,7 @@ class _VideoList extends StatelessWidget {
 
   _buildVideo(BuildContext context, Video video) {
     return GestureDetector(
-      onTap: () => _videoTapped(context, video),
+      onTap: () => _videoTapped(context, video.videoId),
       child: Column(
         children: <Widget>[
           Row(
@@ -130,8 +136,8 @@ class _VideoList extends StatelessWidget {
     );
   }
 
-  _videoTapped(BuildContext context, Video video) {
+  _videoTapped(BuildContext context, String videoId) {
     Navigator.pushNamed(context, VideoScreen.route,
-        arguments: VideoScreenArguments(video));
+        arguments: VideoScreenArguments(videoId));
   }
 }

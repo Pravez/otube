@@ -3,7 +3,7 @@
 import 'package:otube/model/video.dart';
 
 class VideoScreenArguments {
-  final Video video;
+  final String videoId;
 
-  VideoScreenArguments(this.video);
+  VideoScreenArguments(this.videoId);
 }

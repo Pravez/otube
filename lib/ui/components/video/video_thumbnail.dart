@@ -7,8 +7,9 @@ import 'package:otube/utils/utils.dart';
 
 class VideoThumbnailImage extends StatefulWidget {
   final List<VideoThumbnail> thumbnails;
+  final BoxFit fit;
 
-  const VideoThumbnailImage({Key key, this.thumbnails}) : super(key: key);
+  const VideoThumbnailImage({Key key, this.thumbnails, this.fit = BoxFit.cover}) : super(key: key);
 
   @override
   _VideoThumbnailImageState createState() => _VideoThumbnailImageState();
@@ -33,7 +34,7 @@ class _VideoThumbnailImageState extends State<VideoThumbnailImage> {
   Future<CachedNetworkImage> loadThumbnail() async {
     return CachedNetworkImage(
       imageUrl: getBestThumbnailUrl(),
-      fit: BoxFit.cover,
+      fit: widget.fit,
       placeholder: (context, url) => CircularProgressIndicator(),
       errorWidget: (context, error, err) => Text("error"),
     );

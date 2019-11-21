@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:otube/bloc/service/invidious_repository.dart';
-import 'package:otube/bloc/service/invidious_video_event.dart';
+import 'package:otube/bloc/service/events/invidious_video_event.dart';
 import 'package:otube/bloc/state/invidious_query_state.dart';
 
 class InvidiousVideoBloc

@@ -12,4 +12,9 @@ class Utils {
   static String formatLikeCount(int number, { int floorValue = 1000 }) {
     return number > floorValue ? "${number ~/ 1000} k" : number.toString();
   }
+
+  static String format(Duration d) {
+    final startSub = d.inHours > 0 ? 0 : 2;
+    return d.toString().substring(startSub, 7);
+  }
 }

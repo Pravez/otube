@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:otube/bloc/service/invidious_query_event.dart';
+import 'package:otube/bloc/service/events/invidious_query_event.dart';
 import 'package:otube/bloc/service/invidious_query_type.dart';
 import 'package:otube/bloc/service/invidious_repository.dart';
 import 'package:otube/bloc/state/invidious_query_state.dart';

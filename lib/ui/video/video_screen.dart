@@ -21,7 +21,7 @@ class VideoScreen extends StatelessWidget {
         body: BlocProvider(
           builder: (context) => InvidiousVideoBloc(),
           child: InvidiousVideoHandler(
-            video: arguments.video,
+            videoId: arguments.videoId,
           ),
         ));
   }
