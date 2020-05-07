@@ -3,12 +3,15 @@ import 'package:otube/bloc/invidious_video_bloc.dart';
 import 'package:otube/ui/components/invidious_video_player.dart';
 import 'package:otube/ui/video/video_screen_arguments.dart';
 import 'package:flutter/material.dart';
+import 'package:otube/utils/utils.dart';
 
 class VideoScreen extends StatelessWidget {
   static const route = "/video";
   final VideoScreenArguments arguments;
 
-  const VideoScreen({Key key, @required this.arguments}) : super(key: key);
+  VideoScreen({Key key, @required this.arguments}) : super(key: key) {
+    Utils.enableSystemUiOverlays(false);
+  }
 
   @override
   Widget build(BuildContext context) {

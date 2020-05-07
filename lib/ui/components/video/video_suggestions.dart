@@ -50,7 +50,7 @@ class _VideoSuggestionsState extends State<VideoSuggestions> {
   }
 
   _videoTapped(BuildContext context, String videoId) {
-    Navigator.pushNamed(context, VideoScreen.route,
+    Navigator.pushReplacementNamed(context, VideoScreen.route,
         arguments: VideoScreenArguments(videoId));
   }
 }

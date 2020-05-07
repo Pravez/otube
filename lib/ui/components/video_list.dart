@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -136,8 +136,10 @@ class _VideoList extends StatelessWidget {
     );
   }
 
-  _videoTapped(BuildContext context, String videoId) {
-    Navigator.pushNamed(context, VideoScreen.route,
+  _videoTapped(BuildContext context, String videoId) async {
+    await Navigator.pushNamed(context, VideoScreen.route,
         arguments: VideoScreenArguments(videoId));
+
+    Utils.enableSystemUiOverlays(true);
   }
 }
