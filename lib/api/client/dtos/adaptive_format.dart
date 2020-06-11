@@ -2,8 +2,6 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'adaptive_format.g.dart';
 
-
-
 @JsonSerializable(nullable: false)
 class AdaptiveFormat {
   final String index;

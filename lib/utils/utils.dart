@@ -9,7 +9,7 @@ class Utils {
     return response.statusCode != HttpStatus.ok;
   }
 
-  static String formatLikeCount(int number, { int floorValue = 1000 }) {
+  static String formatLikeCount(int number, {int floorValue = 1000}) {
     return number > floorValue ? "${number ~/ 1000} k" : number.toString();
   }
 

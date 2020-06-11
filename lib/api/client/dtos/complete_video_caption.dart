@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+
 part 'complete_video_caption.g.dart';
 
 @JsonSerializable(nullable: false)

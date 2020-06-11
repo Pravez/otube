@@ -3,7 +3,7 @@ description: Alternative frontend for Youtube based on Invidious.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.9.0-14.0.dev.flutter-5c1376615e <3.0.0"
+  sdk: ">=2.8.0 <3.0.0"
 
 dependencies:
   flutter:

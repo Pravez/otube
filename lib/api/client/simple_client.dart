@@ -1,5 +1,6 @@
-import 'client.dart';
 import 'dart:convert';
+
+import 'client.dart';
 
 class SimpleClient extends HttpClient {
   Future<dynamic> fetchJson(String path,

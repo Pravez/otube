@@ -11,9 +11,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   HomeBloc _bloc;
-
 
   @override
   Widget build(BuildContext context) {
